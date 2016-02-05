@@ -1,0 +1,37 @@
+package Thread1;
+
+/*
+* This program will count to 10. Each thread will do the same
+* thing
+ */
+
+
+public class App {
+    public static void main(String[] args){
+
+        // Declaration of runner objects
+        Runner runnerOne = new Runner();
+        Runner runnerTwo = new Runner();
+        Runner runnerThree = new Runner();
+
+        //Start the runners
+        runnerOne.start();
+        runnerTwo.start();
+
+
+        //runner.join requires a start before and requires other threads to wait until the stated
+        //threads finish.
+        try {
+            runnerOne.join();
+            runnerTwo.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+
+        }
+        System.out.println("-----------------------end join----------------------------");
+        System.out.println("********************Start new Thread********************");
+        runnerThree.start();
+
+
+    }
+}
