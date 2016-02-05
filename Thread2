@@ -1,0 +1,61 @@
+package Thread2;
+
+// This program deals with Thread Pools and shows a few ways to deal with them.
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.Scanner;
+
+class RunnerTwo implements Runnable {
+
+    @Override
+    public void run() {
+
+        for (int i = 1; i <= 10; i++) {
+            System.out.println("Round: " + i);
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+
+public class ThreadTwo {
+
+
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+        System.out.print("Please enter the size of your Thread Pool: ");
+        int poolSize = input.nextInt();
+
+        //Declare a pool of executors
+        ExecutorService executor = Executors.newFixedThreadPool(poolSize);
+
+        for(int i = 1; i <= poolSize; i++){
+            executor.execute(new RunnerTwo());
+        }
+
+
+       /* executor.execute(new RunnerTwo());
+        executor.execute(new RunnerTwo());
+        executor.execute(new RunnerTwo());
+        executor.execute(new RunnerTwo());*/
+
+        // Extra executor outside the pool that will run by itself
+        executor.execute(new RunnerTwo());
+
+        //This line has to be here to end the program
+        executor.shutdown();
+
+
+
+    }
+
+
+
+}
