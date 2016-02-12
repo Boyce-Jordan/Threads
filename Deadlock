@@ -1,0 +1,86 @@
+
+
+public class Deadlock {
+
+    private int holeDepth = 0;
+    private Object lockOne = new Object();
+    private Object lockTwo = new Object();
+
+
+    public void processOne() {
+
+        synchronized(lockOne) {
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+            synchronized (lockTwo) {
+                System.out.println("End Process");
+            }
+        }
+    }
+
+    public void processTwo() {
+
+        synchronized (lockTwo) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+            synchronized (lockOne) {
+                System.out.println("Start Process");
+            }
+        }
+    }
+
+
+    public void dig(){ //add synchronized here
+        for(int i = 1; i <= 10; i++) {
+            holeDepth++;
+            System.out.println(holeDepth);
+        }
+        processOne();
+        processTwo();
+    }
+
+
+    public static void main(String[] args){
+        Deadlock shovel = new Deadlock();
+
+        // New Thread to dig 10 feet
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                    shovel.dig();
+
+            }
+        });
+
+        // New Thread to dig 10 feet
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                    shovel.dig();
+            }
+        });
+
+        t1.start();
+        t2.start();
+
+        try{
+            t1.join();
+            t2.join();
+        }catch(InterruptedException e){
+            e.getMessage();
+        }
+    }
+}
